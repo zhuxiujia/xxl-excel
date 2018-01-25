@@ -31,12 +31,12 @@ public class ExcelImportUtil {
      * @param sheetClass
      * @return
      */
-    public static List<Object> importExcel(Workbook workbook, Class<?> sheetClass) {
-        List<Object> sheetDataList = importSheet(workbook, sheetClass);
+    public static <T> List<T> importExcel(Workbook workbook, Class<T> sheetClass) {
+        List<T> sheetDataList = importSheet(workbook, sheetClass);
         return sheetDataList;
     }
 
-    public static List<Object> importSheet(Workbook workbook, Class<?> sheetClass) {
+    public static <T >List<T> importSheet(Workbook workbook, Class<T> sheetClass) {
         try {
             // sheet
             ExcelSheet excelSheet = sheetClass.getAnnotation(ExcelSheet.class);
@@ -65,11 +65,11 @@ public class ExcelImportUtil {
 
             Iterator<Row> sheetIterator = sheet.rowIterator();
             int rowIndex = 0;
-            List<Object> dataList = new ArrayList<Object>();
+            List<T> dataList = new ArrayList<>();
             while (sheetIterator.hasNext()) {
                 Row rowX = sheetIterator.next();
                 if (rowIndex > 0) {
-                    Object rowObj = sheetClass.newInstance();
+                    T rowObj = sheetClass.newInstance();
                     for (int i = 0; i < fields.size(); i++) {
 
                         // cell
@@ -114,10 +114,10 @@ public class ExcelImportUtil {
      * @param sheetClass
      * @return
      */
-    public static List<Object> importExcel(File excelFile, Class<?> sheetClass) {
+    public static <T> List<T> importExcel(File excelFile, Class<T> sheetClass) {
         try {
             Workbook workbook = WorkbookFactory.create(excelFile);
-            List<Object> dataList = importExcel(workbook, sheetClass);
+            List<T> dataList = importExcel(workbook, sheetClass);
             return dataList;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -135,9 +135,9 @@ public class ExcelImportUtil {
      * @param sheetClass
      * @return
      */
-    public static List<Object> importExcel(String filePath, Class<?> sheetClass) {
+    public static <T> List<T> importExcel(String filePath, Class<T> sheetClass) {
         File excelFile = new File(filePath);
-        List<Object> dataList = importExcel(excelFile, sheetClass);
+        List<T> dataList = importExcel(excelFile, sheetClass);
         return dataList;
     }
 
@@ -148,10 +148,10 @@ public class ExcelImportUtil {
      * @param sheetClass
      * @return
      */
-    public static List<Object> importExcel(InputStream inputStream, Class<?> sheetClass) {
+    public static <T> List<T> importExcel(InputStream inputStream, Class<T> sheetClass) {
         try {
             Workbook workbook = WorkbookFactory.create(inputStream);
-            List<Object> dataList = importExcel(workbook, sheetClass);
+            List<T> dataList = importExcel(workbook, sheetClass);
             return dataList;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
